@@ -34,6 +34,8 @@ export async function runJest(config: d.ValidatedConfig, env: d.E2EProcessEnv) {
     // run the @jest/core with our data rather than letting the
     // @jest/core parse the args itself
     const { runCLI } = require('@jest/core');
+    // TODO(NOW): We lose typings with the require here...which makes some of the yargs stuff kind of pointless (until
+    // we fix the typings of course)
     const cliResults = (await runCLI(jestArgv, projects)) as {
       results: AggregatedResult;
     };
@@ -51,6 +53,7 @@ export async function runJest(config: d.ValidatedConfig, env: d.E2EProcessEnv) {
  * @returns the test runner
  */
 export function createTestRunner(): JestTestRunner {
+  // TODO(NOW): Remove support for earlier versions of Jest
   // The left hand side of the '??' is needed for Jest v27, the right hand side for Jest 26 and below
   const TestRunner = require('jest-runner').default ?? require('jest-runner');
 
@@ -61,7 +64,7 @@ export function createTestRunner(): JestTestRunner {
       // filter out only the tests the flags said we should run
       tests = tests.filter((t) => includeTestFile(t.path, env));
 
-      if (env.__STENCIL_SCREENSHOT__ === 'true' && env.__STENCIL_EMULATE_CONFIGS__) {
+      if (env.__STENCIL_SCREENSHOT__ === 'true') {
         // we're doing e2e screenshots, so let's loop through
         // each of the emulate configs for each test
 
@@ -106,8 +109,8 @@ export function includeTestFile(testPath: string, env: d.E2EProcessEnv) {
   return false;
 }
 
-export function getEmulateConfigs(testing: d.TestingConfig, flags: ConfigFlags): d.EmulateConfig[] {
-  let emulateConfigs = testing.emulate?.slice() ?? [];
+export function getEmulateConfigs(testing: d.TestingConfig, flags: ConfigFlags) {
+  let emulateConfigs = testing.emulate.slice();
 
   if (typeof flags.emulate === 'string') {
     const emulateFlag = flags.emulate.toLowerCase();
