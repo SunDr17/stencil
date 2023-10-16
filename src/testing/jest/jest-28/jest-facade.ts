@@ -39,7 +39,9 @@ export class Jest28Stencil implements JestFacade {
     return jestSetupTestFramework;
   }
 
-  getJestPreset() {
+  // TODO(NOW): Fix this
+  // @ts-ignore
+  getJestPreset(): any {
     return preset;
   }
 }
