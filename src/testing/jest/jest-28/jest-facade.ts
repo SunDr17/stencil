@@ -27,6 +27,8 @@ export class Jest28Stencil implements JestFacade {
     return createJestPuppeteerEnvironment;
   }
 
+  // TODO(NOW): Fix typings
+  // @ts-ignore
   getJestPreprocessor() {
     return jestPreprocessor;
   }

@@ -56,7 +56,7 @@ export const jestPreprocessor = {
     sourcePath: string,
     jestConfig: Jest26Config | Jest27TransformOptions,
     transformOptions?: Jest26Config,
-  ): string {
+  ): { code: string } {
     /**
      * As of Jest 27, `jestConfig` changes its shape (as it's been moved into `transformOptions`). To preserve
      * backwards compatibility, we allow Jest to pass 4 arguments and check the shape of the third and fourth arguments
@@ -102,10 +102,10 @@ export const jestPreprocessor = {
         throw new Error(msg);
       }
 
-      return results.code;
+      return {code: results.code};
     }
 
-    return sourceText;
+    return {code: sourceText};
   },
 
   /**

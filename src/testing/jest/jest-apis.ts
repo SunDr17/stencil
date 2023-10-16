@@ -27,7 +27,7 @@ export type JestPreprocessor = {
     sourcePath: string,
     jestConfig: Jest26Config | Jest27TransformOptions,
     transformOptions?: Jest26Config,
-  ): string;
+  ): string | { code: string }; // TODO(NOW): Make this better
   getCacheKey(
     sourceText: string,
     sourcePath: string,
